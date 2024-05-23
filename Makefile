@@ -1,5 +1,7 @@
+ENV_FILE="./.env"
+
 compose_up:
-	docker-compose up -d
+	source ${ENV_FILE} && docker-compose up -d
 
 compose_down:
-	docker-compose down
+	source ${ENV_FILE} && docker-compose down
