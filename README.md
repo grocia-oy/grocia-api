@@ -87,7 +87,7 @@ poetry remove <package-name> --group dev
 make compose_up
 ```
 
-After running the command, the API will be available at http://${DOCKER_HOST}:${DOCKER_PORT} and the API documentation will be available at http://${DOCKER_HOST}:${DOCKER_PORT}/docs.
+After running the command, the API will be available at `http://${DOCKER_HOST}:${DOCKER_PORT}` and the API documentation will be available at `http://${DOCKER_HOST}:${DOCKER_PORT}/docs`.
 
 ### Stop the application:
 
