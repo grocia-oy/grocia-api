@@ -12,3 +12,11 @@ services:
     volumes:
       - ./src:/code/src
       - ./tests:/code/tests
+    command:
+      - uvicorn
+      - src.main:app
+      - --host
+      - ${DOCKER_HOST}
+      - --port
+      - ${DOCKER_PORT}
+      - --reload
