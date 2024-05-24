@@ -1,26 +1,21 @@
 version: "3"
 
 services:
-  api:
+  app:
     container_name: grocia-api
     build:
       dockerfile: Dockerfile
     env_file:
       - .env
     ports:
-      - "${DOCKER_PORT:-8686}:${DOCKER_PORT:-8686}"
+      - "${DOCKER_PORT}:${DOCKER_PORT}"
     volumes:
       - ./src:/code/src
       - ./tests:/code/tests
-    command:
-      - uvicorn
-      - src.main:app
-      - --host
-      - ${DOCKER_HOST}
-      - --port
-      - ${DOCKER_PORT}
-      - --reload
-  db:
+    command: uvicorn src.main:app --host ${DOCKER_HOST} --port ${DOCKER_PORT} --reload
+    depends_on:
+      - app_db
+  app_db:
     container_name: grocia-postgres
     image: postgres:16
     env_file:
@@ -31,7 +26,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: /var/lib/postgresql/data
     ports:
-      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
