@@ -1,4 +1,4 @@
-# grocia-api
+# Grocia API
 
 ## Requirements
 
@@ -78,3 +78,19 @@ poetry remove <package-name> --group dev
 
 - The `.python-version` file contains the Python version that the project is using.
 - The `pyproject.toml` and `poetry.lock` files contain the project dependencies and some what similar to the `package.json` and `package-lock.json` files in Node.js projects.
+
+## Application usage
+
+### Run the application:
+
+```bash
+make compose_up
+```
+
+After running the command, the API will be available at http://${DOCKER_HOST}:${DOCKER_PORT} and the API documentation will be available at http://${DOCKER_HOST}:${DOCKER_PORT}/docs.
+
+### Stop the application:
+
+```bash
+make compose_down
+```
