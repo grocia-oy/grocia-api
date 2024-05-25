@@ -1,27 +1,27 @@
 version: "3"
 
 services:
-  api:
-    container_name: grocia-api
+  app:
+    container_name: app
     build:
       dockerfile: Dockerfile
     env_file:
       - .env
     ports:
-      - "${DOCKER_PORT:-8686}:${DOCKER_PORT:-8686}"
+      - "${DOCKER_PORT}:${DOCKER_PORT}"
     volumes:
       - ./src:/code/src
       - ./tests:/code/tests
-    command:
-      - uvicorn
-      - src.main:app
-      - --host
-      - ${DOCKER_HOST}
-      - --port
-      - ${DOCKER_PORT}
-      - --reload
-  db:
-    container_name: grocia-postgres
+      - ./alembic:/code/alembic
+      - ./alembic.ini:/code/alembic.ini
+      - ./scripts:/code/scripts
+    command: uvicorn src.main:app --host ${DOCKER_HOST} --port ${DOCKER_PORT} --reload
+    depends_on:
+      - app_db
+
+  app_db:
+    container_name: app_db
+    hostname: app_db
     image: postgres:16
     env_file:
       - .env
@@ -31,10 +31,16 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       PGDATA: /var/lib/postgresql/data
     ports:
-      - "${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    restart: always
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+    driver: local
+
+networks:
+  default:
+    external: true
+    name: app_network
