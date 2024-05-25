@@ -8,9 +8,17 @@
 
 - Python dependency management tool: [poetry](https://python-poetry.org/)
 
+- Justfile: [just](https://github.com/casey/just)
+
 ### Installation
 
-1. Install `pyenv` and Python 3.10.14 version:
+1. Install `just`:
+
+```bash
+brew install just
+```
+
+2. Install `pyenv` and Python 3.10.14 version:
 
 ```bash
 brew install pyenv
@@ -18,13 +26,13 @@ pyenv install 3.10.14
 pyenv local 3.10.14
 ```
 
-2. Install `pipx`:
+3. Install `pipx`:
 
 ```bash
 brew install pipx
 ```
 
-3. Install `poetry` and project dependencies:
+4. Install `poetry` and project dependencies:
 
 ```bash
 pipx install poetry
@@ -81,16 +89,57 @@ poetry remove <package-name> --group dev
 
 ## Application usage
 
-### Run the application:
+The application contains the commands written in the `justfile` which can be executed using the `just` command. To display the list of commands:
 
 ```bash
-make compose_up
+just --list
 ```
 
-After running the command, the API will be available at `http://${DOCKER_HOST}:${DOCKER_PORT}` and the API documentation will be available at `http://${DOCKER_HOST}:${DOCKER_PORT}/docs`.
+### Running the application
 
-### Stop the application:
+- To build the docker image:
 
 ```bash
-make compose_down
+just build
+```
+
+- To run the application:
+
+```bash
+just up
+```
+
+- To stop the application:
+
+```bash
+just down
+```
+
+- To run tests of the application:
+
+```bash
+just test
+```
+
+### Migrations
+
+- To create a new migration:
+
+```bash
+just mm <migration-name>
+```
+
+- To run the migration:
+
+```bash
+just migrate
+```
+
+- To downgrade the migration:
+
+```bash
+just downgrade <downgrade-version>
+# Example:
+just downgrade -1 # Downgrade the last migration
+just downgrade -2 # Downgrade the last two migrations
 ```
